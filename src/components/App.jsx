@@ -6,16 +6,28 @@ import { ContactForm } from './ContactForm/ContactForm';
 
 export class App extends Component {
   state = {
-    contacts: [
-      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-    ],
+    contacts: [],
     filter: '',
     name: '',
     number: '',
   };
+
+  //Для отрисовки данных из локального хранилища нужно изменить значения в state данными из хранилища.Для этого парсим данные и делаем проверку 
+componentDidMount(){
+ const contacts = localStorage.getItem('contacts')
+ const parsedContacts = JSON.parse(contacts)
+ if (parsedContacts !== null) {
+  this.setState({contacts: parsedContacts})
+ }
+}
+
+
+//Добавление данных в LocalStorage. Для добавления данных берем предыдущее значение
+  componentDidUpdate(prevState){
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts))
+    }
+  }
 
   onDelete = id => {
     this.setState(prevState => {
